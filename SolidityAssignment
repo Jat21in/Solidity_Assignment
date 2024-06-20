@@ -17,32 +17,37 @@ pragma solidity 0.8.18;
 
 contract MyToken {
 
-    // Public variables to store token details
+    // public variables here
     string public name;
     string public symbol;
     uint256 public totalSupply;
 
-    // Mapping of addresses to balances
+    // mapping variable here
     mapping(address => uint256) public balances;
 
-    // Constructor to initialize token details
-    constructor(string memory _name, string memory _symbol, uint256 _totalSupply) {
+    // constructor to initialize the token details
+    constructor(string memory _name, string memory _symbol, uint256 _initialSupply) {
         name = _name;
         symbol = _symbol;
-        totalSupply = _totalSupply;
-        balances[msg.sender] = _totalSupply; // Assign initial supply to contract deployer
+        totalSupply = _initialSupply;
+        balances[msg.sender] = _initialSupply;
     }
 
-    // Mint function to create new tokens
-    function mint(address _recipient, uint256 _value) public {
-        totalSupply += _value; // Increase total supply
-        balances[_recipient] += _value; // Increase recipient's balance
+    // mint function
+    function mint(address _to, uint256 _value) public {
+        totalSupply += _value;
+        balances[_to] += _value;
     }
 
-    // Burn function to destroy tokens
-    function burn(address _owner, uint256 _value) public {
-        require(balances[_owner] >= _value, "Insufficient balance"); // Check if owner has enough balance
-        totalSupply -= _value; // Decrease total supply
-        balances[_owner] -= _value; // Decrease owner's balance
+    // burn function
+    function burn(address _from, uint256 _value) public {
+        require(balances[_from] >= _value, "Insufficient balance to burn");
+        totalSupply -= _value;
+        balances[_from] -= _value;
+    }
+
+    // function to get the balance of a specific address
+    function balanceOf(address _account) public view returns (uint256) {
+        return balances[_account];
     }
 }
